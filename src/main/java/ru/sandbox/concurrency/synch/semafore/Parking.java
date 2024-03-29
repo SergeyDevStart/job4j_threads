@@ -1,4 +1,4 @@
-package ru.job4j.synchronizers.semafore;
+package ru.sandbox.concurrency.synch.semafore;
 
 import java.util.concurrent.Semaphore;
 
