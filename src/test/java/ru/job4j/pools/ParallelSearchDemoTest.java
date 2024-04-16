@@ -11,8 +11,7 @@ class ParallelSearchDemoTest {
         for (int i = 0; i < array.length; i++) {
             array[i] = i;
         }
-        ParallelSearchDemo<Integer> searchDemo = new ParallelSearchDemo<>(array, 0, array.length, 34);
-        assertThat(searchDemo.compute()).isEqualTo(34);
+        assertThat(ParallelSearchDemo.search(array, 34)).isEqualTo(34);
     }
 
     @Test
@@ -21,15 +20,13 @@ class ParallelSearchDemoTest {
         Character[] array = string.chars()
                 .mapToObj(i -> (char) i)
                 .toArray(Character[]::new);
-        ParallelSearchDemo<Character> searchDemo = new ParallelSearchDemo<>(array, 0, array.length, 'k');
-        assertThat(searchDemo.compute()).isEqualTo(10);
+        assertThat(ParallelSearchDemo.search(array, 'k')).isEqualTo(10);
     }
 
     @Test
     public void whenLineSearchThen3() {
         Integer[] array = new Integer[] {1, 2, 4, 34, 54, 6, 7};
-        ParallelSearchDemo<Integer> searchDemo = new ParallelSearchDemo<>(array, 0, array.length, 34);
-        assertThat(searchDemo.compute()).isEqualTo(3);
+        assertThat(ParallelSearchDemo.search(array, 34)).isEqualTo(3);
     }
 
     @Test
@@ -38,7 +35,16 @@ class ParallelSearchDemoTest {
         for (int i = 0; i < array.length; i++) {
             array[i] = i;
         }
-        ParallelSearchDemo<Integer> searchDemo = new ParallelSearchDemo<>(array, 0, array.length, 50);
-        assertThat(searchDemo.compute()).isEqualTo(-1);
+        assertThat(ParallelSearchDemo.search(array, 50)).isEqualTo(-1);
+    }
+
+    @Test
+    public void whenSearchLast() {
+        Integer[] array = new Integer[15];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = i;
+        }
+        Integer searchElement = array[array.length - 1];
+        assertThat(ParallelSearchDemo.search(array, searchElement)).isEqualTo(14);
     }
 }
