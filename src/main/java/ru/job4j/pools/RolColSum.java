@@ -1,35 +1,41 @@
 package ru.job4j.pools;
 
-import java.util.Arrays;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class RolColSum {
+    private static final Logger LOG = LoggerFactory.getLogger(RolColSum.class.getName());
+
     public static class Sums {
-        private int rowSum;
-        private int colSum;
+        private final int rowSum;
+        private final int colSum;
 
         public Sums(int rowSum, int colSum) {
             this.rowSum = rowSum;
             this.colSum = colSum;
         }
 
-        public int getRowSum() {
-            return rowSum;
-        }
-
-        public int getColSum() {
-            return colSum;
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            Sums sums = (Sums) o;
+            return rowSum == sums.rowSum && colSum == sums.colSum;
         }
 
         @Override
-        public String toString() {
-            return "Sums{"
-                    + "rowSum=" + rowSum
-                    + ", colSum=" + colSum
-                    + '}';
+        public int hashCode() {
+            return Objects.hash(rowSum, colSum);
         }
     }
 
@@ -40,6 +46,7 @@ public class RolColSum {
             sumRow += matrix[index][k];
             sumCol += matrix[k][index];
         }
+        LOG.info("{} work", Thread.currentThread().getName());
         return new Sums(sumRow, sumCol);
     }
 
@@ -59,7 +66,7 @@ public class RolColSum {
         int quantity = matrix.length;
         Sums[] sums = new Sums[quantity];
         Map<Integer, CompletableFuture<Sums>> map = new HashMap<>();
-        for (int index = 0; index < (quantity / 2); index++) {
+        for (int index = 0; index <= (quantity / 2); index++) {
             map.put(index, asyncTask(matrix, index));
             int k = quantity - index - 1;
             map.put(k, asyncTask(matrix, k));
